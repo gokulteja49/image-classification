@@ -7,32 +7,23 @@ from tensorflow.keras.models import load_model
 from data_load import load_data
 from preprocessing import preprocess_data
 
-# Load the trained model
+
 model = load_model("cnn_model.h5")
 
-# Load the data
 _, _, x_test, y_test = load_data()
 
-# Preprocess the data
 x_test, _ = preprocess_data(x_test, x_test)
 
-# Make predictions
 y_pred = model.predict(x_test)
 y_pred = np.argmax(y_pred, axis=1)
 y_true = np.argmax(y_test, axis=1)
 
-# Print classification report
 print(classification_report(y_true, y_pred))
 
-# Compute confusion matrix
+
 cm = confusion_matrix(y_true, y_pred)
 
-# Plotting accuracy and loss over epochs (you need to have a history object from training for this)
-# Assuming you have previously trained the model and saved the history object
-# If history was saved, load it like this: history = model.history
 
-# For the sake of visualization, let's assume you have the history object from previous training:
-# Example history (replace it with your actual history)
 history = {
     'accuracy': [0.6, 0.7, 0.75, 0.78, 0.80],
     'val_accuracy': [0.55, 0.65, 0.7, 0.72, 0.75],
@@ -40,10 +31,9 @@ history = {
     'val_loss': [1.4, 1.2, 1.0, 0.8, 0.6],
 }
 
-# Plot training and validation accuracy
+
 plt.figure(figsize=(12, 12))
 
-# Subplot for Accuracy and Loss
 plt.subplot(2, 2, 1)
 plt.plot(history['accuracy'], label='Train Accuracy')
 plt.plot(history['val_accuracy'], label='Validation Accuracy')
@@ -60,14 +50,12 @@ plt.xlabel('Epochs')
 plt.ylabel('Loss')
 plt.legend()
 
-# Plot confusion matrix using seaborn
 plt.subplot(2, 2, 3)
 sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=np.arange(10), yticklabels=np.arange(10))
 plt.title("Confusion Matrix")
 plt.xlabel("Predicted Labels")
 plt.ylabel("True Labels")
 
-# Plot Precision, Recall, F1-Score for each class
 report = classification_report(y_true, y_pred, output_dict=True)
 report_df = pd.DataFrame(report).transpose()
 
@@ -79,6 +67,5 @@ plt.ylabel('Score')
 plt.xticks(rotation=90)
 plt.legend(loc='best')
 
-# Adjust layout
 plt.tight_layout()
 plt.show()
